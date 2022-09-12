@@ -12,7 +12,7 @@ class Answer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      color: Colors.amberAccent,
       width: double.infinity,
       child: RaisedButton(
         color: Colors.blue,
