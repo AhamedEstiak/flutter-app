@@ -14,54 +14,61 @@ class ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(spendingPctOfTotal);
-
-    return Column(
-      children: [
-        Container(
-          height: 20,
-          child: FittedBox(
-            child: Text(
-              '\$${spendingTotal.toStringAsFixed(0)}',
+    return LayoutBuilder(
+      builder: (ctx, constraints) {
+        return Column(
+          children: [
+            Container(
+              height: constraints.maxHeight * 0.15,
+              child: FittedBox(
+                child: Text(
+                  '\$${spendingTotal.toStringAsFixed(0)}',
+                ),
+              ),
             ),
-          ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Container(
-          width: 10,
-          height: 60,
-          child: Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey,
+            SizedBox(
+              height: constraints.maxHeight * 0.05,
+            ),
+            Container(
+              width: 10,
+              height: constraints.maxHeight * 0.6,
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.grey,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromRGBO(220, 220, 220, 1),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromRGBO(220, 220, 220, 1),
-                ),
-              ),
-              // spendingPctOfTotal need to between 0 - 1
-              FractionallySizedBox(
-                heightFactor: spendingPctOfTotal,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).colorScheme.primary,
+                  // spendingPctOfTotal need to between 0 - 1
+                  FractionallySizedBox(
+                    heightFactor: spendingPctOfTotal,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Text(label),
-      ],
+            ),
+            SizedBox(
+              height: constraints.maxHeight * 0.05,
+            ),
+            SizedBox(
+              height: constraints.maxHeight * 0.15,
+              child: FittedBox(
+                child: Text(label),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

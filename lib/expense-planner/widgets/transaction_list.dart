@@ -5,33 +5,43 @@ import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+  final Function removeTransaction;
 
-  const TransactionList({super.key, required this.transactions});
+  const TransactionList({
+    super.key,
+    required this.transactions,
+    required this.removeTransaction,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 450,
+    return Container(
+      // color: Colors.red,
       child: transactions.isEmpty
-          ? Column(
-              children: [
-                Text(
-                  'No transaction added yet',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 200,
-                  child: Image.asset(
-                    'assets/images/waiting.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
+          ? LayoutBuilder(
+              builder: (ctx, constraints) {
+                return Column(
+                  children: [
+                    Text(
+                      'No transaction added yet',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: constraints.maxHeight * 0.7,
+                      child: Image.asset(
+                        'assets/images/waiting.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                );
+              },
             )
           : ListView.builder(
+              itemCount: transactions.length,
               itemBuilder: (ctx, index) {
                 return Card(
                   elevation: 5,
@@ -61,7 +71,22 @@ class TransactionList extends StatelessWidget {
                     ),
                     subtitle: Text(
                         DateFormat.yMMMd().format(transactions[index].date)),
-                    trailing: Icon(Icons.more_vert),
+                    trailing: MediaQuery.of(context).size.width > 400
+                        ? TextButton.icon(
+                            onPressed: () =>
+                                removeTransaction(transactions[index].id),
+                            icon: const Icon(Icons.delete),
+                            style: TextButton.styleFrom(
+                              primary: Theme.of(context).errorColor,
+                            ),
+                            label: const Text('Delete'),
+                          )
+                        : IconButton(
+                            onPressed: () =>
+                                removeTransaction(transactions[index].id),
+                            icon: const Icon(Icons.delete),
+                            color: Theme.of(context).errorColor,
+                          ),
                   ),
                 );
                 // return Card(
@@ -109,7 +134,6 @@ class TransactionList extends StatelessWidget {
                 //   ),
                 // );
               },
-              itemCount: transactions.length,
             ),
     );
   }
